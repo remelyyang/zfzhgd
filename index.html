@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 个摄像头内容展示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .camera-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .camera {
+            width: calc(20% - 20px);
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .camera h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .camera video {
+            width: 100%;
+            height: auto;
+        }
+
+        .play-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .play-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>5 个摄像头内容展示</h1>
+    <div class="camera-container">
+        <div class="camera">
+            <h2>南湖桥</h2>
+            <video id="camera1" controls></video>
+            <button class="play-button" data-url="https://www.cloud-dahua.com/h5/#/h5Live?companyId=701661541&channelId=1116708286456901632&timeD=1744173877371">播放</button>
+        </div>
+        <div class="camera">
+            <h2>红岩溪桥</h2>
+            <video id="camera2" controls></video>
+            <button class="play-button" data-url="http://192.168.31.222:10000/cloud/player.html?live_url=ws://192.168.31.222:10000/proxy/sms/local/live/PTzF4x0aGf1W8_01.flv?expired=20250408230311">播放</button>
+        </div>
+        <div class="camera">
+            <h2>摄像头 3</h2>
+            <video id="camera3" controls></video>
+            <button class="play-button" data-url="http://example.com/camera3">播放</button>
+        </div>
+        <div class="camera">
+            <h2>摄像头 4</h2>
+            <video id="camera4" controls></video>
+            <button class="play-button" data-url="http://example.com/camera4">播放</button>
+        </div>
+        <div class="camera">
+            <h2>摄像头 5</h2>
+            <video id="camera5" controls></video>
+            <button class="play-button" data-url="http://example.com/camera5">播放</button>
+        </div>
+    </div>
+    <!-- 模态框 -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <video id="modalVideo" controls></video>
+        </div>
+    </div>
+    <script>
+        // 为播放按钮添加点击事件监听器
+        const playButtons = document.querySelectorAll('.play-button');
+        playButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const url = this.dataset.url;
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            });
+        });
+
+        const cameraIds = ['camera1', 'camera2', 'camera3', 'camera4', 'camera5'];
+        cameraIds.forEach((id, index) => {
+            const videoElement = document.getElementById(id);
+            if (videoElement) {
+                videoElement.addEventListener('error', function () {
+                    console.error(`摄像头 ${index + 1} 加载失败`);
+                });
+                videoElement.addEventListener('click', function () {
+                    const modal = document.getElementById('myModal');
+                    const modalVideo = document.getElementById('modalVideo');
+                    modalVideo.src = this.src;
+                    modalVideo.load();
+                    modal.style.display = "block";
+                });
+            }
+        });
+
+        // 关闭模态框逻辑
+        const closeBtn = document.querySelector('.close');
+        const modal = document.getElementById('myModal');
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = "none";
+        });
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>    
